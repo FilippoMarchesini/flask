@@ -9,15 +9,16 @@ import sqlite3,os
         
 app = Flask(__name__)
 
+DATA_DIR = os.environ.get('OPENSHIFT_DATA_DIR','../data/')
+
+pathDb  = os.path.join(DATA_DIR,'Alunni.db')
 
 def initDB():
     
-    DATA_DIR = os.environ.get('OPENSHIFT_DATA_DIR','../data/Alunni.db')
-
-    pathDb  = os.path.join(DATA_DIR,'Alunni.db')
+    
     # crea le tabelle del DB se non esistono
     #conn = sqlite3.connect('../data/Alunni.db')
-    conn = sqlite3.connect('pathDb')
+    conn = sqlite3.connect(pathDb)
     
     stringSQLTableAlunni = \
         "create table   if not exists  REGISTROALUNNI (\
@@ -67,7 +68,7 @@ def alunnoByNumeroReg():
     
     #apre connessione al DB per inserire un Alunno
     
-    conn = sqlite3.connect('../data/Alunni.db')
+    conn = sqlite3.connect(pathDb)
     print "Opened database successfully  ByNumero";
     cursor = conn.cursor()
     cur = cursor.execute("SELECT * FROM registroAlunni  WHERE NUMEROREG == ? ",[numeroReg]);
@@ -109,7 +110,7 @@ def inserisciAlunnoPOST():
     print [numeroReg,nome,cognome,annoNascita]
     #apre connessione al DB per inserire un Alunno
     
-    conn = sqlite3.connect('../data/Alunni.db')
+    conn = sqlite3.connect(pathDb)
     print "Opened database successfully";
     cursor = conn.cursor()
     cursor.execute("INSERT INTO registroAlunni \
@@ -121,4 +122,4 @@ def inserisciAlunnoPOST():
     
 if __name__ == "__main__":
     #app.debug=True
-    app.run( port=5023)
+    app.run( port=5024)
