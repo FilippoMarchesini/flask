@@ -9,17 +9,17 @@ import sqlite3,os
         
 app = Flask(__name__)
 
+# se esiste var di env OPENSHIFT_DATA_DIR  siamo in opnshift
+# se NON esiste siamo in localhost e DATA_DIR = '../data/'
 DATA_DIR = os.environ.get('OPENSHIFT_DATA_DIR','../data/')
-
 pathDb  = os.path.join(DATA_DIR,'Alunni.db')
 
 def initDB():
-    
-    
-    # crea le tabelle del DB se non esistono
-    #conn = sqlite3.connect('../data/Alunni.db')
+    ''' inizializza DB Sqlite'''
+    # DB non esiste lo crea 
     conn = sqlite3.connect(pathDb)
-    
+
+    # crea le tabelle del DB se non esistono
     stringSQLTableAlunni = \
         "create table   if not exists  REGISTROALUNNI (\
             NUMEROREG integer primary key,\
@@ -27,6 +27,7 @@ def initDB():
             COGNOME   text not null,\
             ANNONASCITA text not null\
         );"
+        
     cursor = conn.cursor()
     cursor.execute(stringSQLTableAlunni)
     conn.commit()
