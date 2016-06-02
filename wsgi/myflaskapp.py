@@ -3,7 +3,7 @@ from flask import jsonify
 from flask import render_template
 from flask import request
 from flask import send_from_directory
-import sqlite3
+import sqlite3,os
         
         
         
@@ -11,9 +11,14 @@ app = Flask(__name__)
 
 
 def initDB():
-    # crea le tabelle del DB se non esistono
-    conn = sqlite3.connect('../data/Alunni.db')
+    
+    DATA_DIR = os.environ.get('OPENSHIFT_DATA_DIR','../data/Alunni.db')
 
+    pathDb  = os.path.join(DATA_DIR,'Alunni.db')
+    # crea le tabelle del DB se non esistono
+    #conn = sqlite3.connect('../data/Alunni.db')
+    conn = sqlite3.connect('pathDb')
+    
     stringSQLTableAlunni = \
         "create table   if not exists  REGISTROALUNNI (\
             NUMEROREG integer primary key,\
@@ -26,7 +31,7 @@ def initDB():
     conn.commit()
     conn.close()
 
-#initDB()
+initDB()
 
 
 @app.route("/")
@@ -116,4 +121,4 @@ def inserisciAlunnoPOST():
     
 if __name__ == "__main__":
     #app.debug=True
-    app.run( port=5022)
+    app.run( port=5023)
